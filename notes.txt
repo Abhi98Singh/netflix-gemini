@@ -1,0 +1,247 @@
+  -  $ For Building Netflix-GPT, we'll use create-react-app package to create our React-app
+       create-react-app provides us ready-to-use reat-app template, it creates a organised
+       strctured folder-strcture for us, it also setups testing for application
+       So If we use CRA to create react app, we dont need to bundle, build or configure our app
+       It does everthing on itself and saves our time.
+
+       Behind the scene, CRA uses webpack bundler to bundle the app...
+       Earlier, we used to parcel to bundle the app, Earlier we configured/itregated everthing  
+       into our App like parcel for bundling, Tailwind for Stling css, jest and react-testing-lib
+       for Testing
+       We should do this if we want to customize our react-app according to our Requirements
+
+
+  -  $ We have to configure Tailwind css acc to CRA
+
+
+  -  $ We'll use Google FireBase for Backend
+
+  
+  -  $ We'll use ChatGPT API
+
+
+  -  $ We can use Formik Library To create Forms in React apps 
+     (if we have to create big and complex forms having so-many fields)
+     When we have to deal with so-many fields in Form, then managing validation
+     handling errors becomes very difficult
+
+  -  $ We'll use utility, lets create validate.js file and write the validation logic in it
+       if the validation fails gives us error message
+
+  -  $ For email validation, lets use  => /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/
+
+     - $ To get form-data either we can use state variables or we can use refrence of that using useRef hook
+          we need a refrences of input elements, so refrence is created by React, so we can use it
+          #useRef() creates a refrence, so we can refer the html elements using this
+
+  -  $ For buliding Authentication we'll need a Backend, for Backend we'll use "Google FireBase"
+          - We'll use Google Firebase as our Backend for User Authenticfication
+          - We can also use Firebase for feature like Sign-in-with-Google
+          - We can also deploy our Website Application to Google Firebase itself, it gives us server and hosting
+            u can host ur application on firebase
+
+        $ - FireBase gives us configuartion, so that we can use connect to the firebase/database
+
+          - Install firebase
+
+          - Creeate a file and copy-paste the firebase code
+
+          - Enable Authentication in firebase
+               - Enabel Email id/Password in Sigin method
+               - Now we can Register Users
+
+          - Lets deploy/host the application
+               - We have already installed firebase - npm i firebase
+               - run this command to install firebase CLI => npm install -g firebase-tools
+               - then run => firebase login
+               - then initialize firenase for config firebase =>firebase init
+               - select and enter the options :- 
+                              * Configure files for firebase hosting and Optionally
+                              * Use an existing proj
+                              * public dir - build
+                              and it will create 'firebase.json'
+               - run the build => npm run build (first make the build of app before deploying)
+               - deploy the app on firebase => firebase deploy
+
+          - To create a user with email-password import two things "getAuth" and "createUserWithEmailAndPassword" 
+
+     -  $ Once our User Sign-up and Sign-in, we will keep his data(that obj) in Redux store, so wherever
+          We'll need the user data we can use it and navigate user to Browse page
+
+          - Lets data in create Redux store to store user obj
+
+        $  - Instead of Dispatching Actions for Sign in, Sign up pr Sign out, we will use a utility
+               given by firebase i.e "onAuthStateChanged" 
+               - this API/Utility is like an event-listner, we dont want to call this api again-again
+                    so lets call this api at root level, we want to call this api as my comp renders
+                    using useEffect
+                    Whenever the page loads this event listner/utility updates
+               - We can Sign In / Sign up/ Sign out the user with using this single API
+
+          - After Signed in / Signed up , lets redirect the user to Browse page
+               for that we'll use navigate to  .. for navigation to diffrent route
+               - we can use window.location.href for navigation
+
+          - Lets add our Header on Broswe page
+
+     
+     - $ We'll use TMDB's API for movies Movies 
+          - TMDB doesnt change their API often
+          - We cannot use Netflix API bcz they are not public, we need authentication for that
+
+
+
+     - $ If the someone is tring to access browse page, we're not checking authentication
+          or if user is not present...Ideally it should redirect the user to login page
+
+     - $  If the user is logged in, then redirect him to the browse page
+          or If the user is not logged in user is trying to access browse
+          page redirect him to login page
+
+          - We have a utility/evenet listner in our body comp i.e onAuthStateChanged
+            so everytime our comp re-renders, this utility is called and it checks
+            auth of the user
+
+          - It updates the store
+
+         # - So, onAuthStateChanged() event listner should navigate the user
+               according to login/logout..
+
+          - Lets put useEffect() in Central place like Header comp
+            Header will remain in our app everytime
+            - Header is inside our route
+            - Even now, we dont need to write navigation logic seprately
+              onAuthStateChanged will take care of everyting
+
+          - onAuthStateChanged() event listner/utility will be called whwnever
+               our headeer comp is loaded/rendered and header comp will be on the
+               dom evertime, we are doing navigation/routing in header comp
+               so it will redirect to user acc to his login/logout
+
+          - It will fix our auth bug
+
+          $ - If our the comp is unmounted, we will unsubscribe the onAuthStateChanged()
+               because we dont want to sunscribe it everytime useEffect is called
+
+            # onAuthStateChanged() api returns a unsubscribe() function, so when this function
+               os called it will remove onAuthStateChanged()
+               So when our Header comp is unmounts, it will unsubscribe it
+
+          
+        - #  Always put hardcoded url, strings and constant data in our constnats.js file  
+               because we can re-use it and have to change once if we need to change it
+
+
+
+       $ - For showing movies on browse page, we'l use TMDB database API's to feth data
+
+          - For API data, first login in into TMDB website
+          - then edit profile => API 
+          - then generate API key and get the api key and registered token
+
+          - Lets move to the documentation, lets use Now playing API of Movies Lists
+          - We have to use options everytime, lets keep it in constants.js file
+          - Let's fetch this now playing api in browse page, we dont want language-filter
+
+
+       $ - Lets put movies data into store in different slice
+          add nowPlayingMovies data to store using Dispatching
+
+
+      $ - our browse comp is looking ugly and has a lot of code, it just should render the jsx
+          lets make a custom hook for fetching data and storing in to the store...extract it
+
+           - custom hook name stats with 'use' and custom hook is normal js function
+               extract all the code from browse page and put it in our custom hook
+               and then export default it
+
+     
+      $ - For getting videos/trailer of particluar movie, we can use another api  Movies - Videos
+          - we can even check the api with partciylar id
+            this api will also give key(youtube key) to fetch the tariler form youtubbe
+
+            - trailer video contains youtube video key and with this key we'll show/render
+               this trailer on page and embed it
+
+     
+     $  - Modular Coding / Sepration of Concerns / Single Responsibilty Principle
+          Every comp has it own job, Code becomes more readable, clean, testable 
+          and modulable :- Always extract ur logic in a differnet file
+
+
+     $ - To autoplay the emebeded video add => "?autoplay=1" in src link
+       - To present embed video with sound muted add "&mute=1"
+          <iframe width="420" height="345" src="http://www.youtube.com/embed/oHg5SJYRHA0?autoplay=1&mute=1" frameborder="0" allowfullscreen></iframe>
+
+          =>  src={
+          "https://www.youtube.com/embed/" +
+          trailerVideo?.key +
+          "?autoplay=1&mute=1&loop=1&playlist=" +
+          trailerVideo?.key
+        }
+
+
+     $ - Lets build Secondary Container
+
+          - $ CDN URl for TMDB images :- https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg
+
+                         - Lets put this url in constants.js
+
+
+
+    $  - We will add GPT in the next action by using Open_AI-GPT's API
+
+       -  Let's integrate GPT API's into our App
+
+       - Lets craete a Seprate page for GPT Search Page, it will have search bar
+          so GPT API will suggest us movies < Movie Recommendation System using GPT >
+
+     
+     - Lets make a button in Header comp for GPT Search page 
+     - and the make a GPTSearch comp and import it into browse page
+     - # We want to toggle b/w   <GptSearch />   Vs     <MainContainer />  <SecondaryContainer />
+
+
+
+     $ - To Intregate OpenAI GPT's API into our proj, first we have to login in platform.openAI
+          and create a secret key to access/call the OpenAI API
+
+       - We can use OpenAI Node API Libraray 
+          - For that, lets create another file to keep code of openAI (it's like authorisation for openAI API)
+
+
+     - Since we are calling Open_AI API from browser(Client side), our API credentials it at risk
+          ideally it should be done from backend, to call it from browser we have to add one more
+           dangerouslyAllowBrowser: true, in OpenAI 
+
+
+
+
+          # For Security of our Securities keys
+     $  - Dont put our Secret Keys in constant file, reather than keep it in .env file
+               append it with React_APP_XYZ_KEY=sjkfsbjesbjsjgsjjlsngs
+
+
+
+
+     $ Memoizayion :- If we go to Home Page from Search page it kepp making API call again and again
+                      even though it has movies data in Store
+                      If we already have data in our store, we dont need to again fetch it
+                      If movies data is already there in our store, we wont make a API call
+                      It will save lots of API call
+
+
+      # You can also ask user for their API key
+
+
+
+
+
+      $ - Now Lets make our Web Application Responsive using Taiwwind
+
+          - How can we write seprate CSS for responsiveness using Tailwind
+
+              - by default : for small devices (mobile phones screen)
+              - sm : for medium devices (larger than small devices)
+              - md : for large devices (larger than medium devices)
+  
